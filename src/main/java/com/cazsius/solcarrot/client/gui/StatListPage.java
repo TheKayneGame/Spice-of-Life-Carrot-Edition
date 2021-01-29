@@ -35,10 +35,10 @@ final class StatListPage extends Page {
 		
 		mainStack.addChild(makeSeparatorLine());
 		
-		int heartsPerMilestone = SOLCarrotConfig.getHeartsPerMilestone();
+		int heartsPerMilestone = SOLCarrotConfig.queueNutritionPerHeart();
 		String heartsGained = fraction(
-			heartsPerMilestone * progressInfo.milestonesAchieved(),
-			heartsPerMilestone * SOLCarrotConfig.getMilestoneCount()
+			progressInfo.getAddedHearts(),
+			SOLCarrotConfig.getMaxAddedHeartsFromFood()
 		);
 		
 		mainStack.addChild(statWithIcon(

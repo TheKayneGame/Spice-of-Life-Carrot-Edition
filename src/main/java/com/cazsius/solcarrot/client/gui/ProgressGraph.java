@@ -22,12 +22,12 @@ final class ProgressGraph extends UIElement {
 		int rightEdge = centerX + segmentLength * 3 / 4;
 		int padding = 4;
 		
-		int milestonesAchieved = progressInfo.milestonesAchieved();
-		int previousMilestone = milestonesAchieved > 0 ? SOLCarrotConfig.milestone(milestonesAchieved - 1) : 0;
-		int nextMilestone = progressInfo.nextMilestone();
+		int milestonesAchieved = progressInfo.getAddedHearts();
+		int previousMilestone = 1; //milestonesAchieved > 0 ? SOLCarrotConfig.milestone(milestonesAchieved - 1) : 0;
+		int nextMilestone = 1; //progressInfo.nextMilestone();
 		boolean hasReachedMax = progressInfo.hasReachedMax();
 		boolean hasSurpassedMax = hasReachedMax && progressInfo.foodsEaten > previousMilestone;
-		int progress = segmentLength * (progressInfo.foodsEaten - previousMilestone) / (nextMilestone - previousMilestone);
+		int progress = segmentLength * (progressInfo.foodsEaten - previousMilestone);
 		int progressX = leftPoint + (hasSurpassedMax ? segmentLength : progress);
 		
 		UIImage carrotIcon = new UIImage(FoodBookScreen.carrotImage);
@@ -41,7 +41,7 @@ final class ProgressGraph extends UIElement {
 		if (hasReachedMax) {
 			carrotIcon.tooltip = localized("gui", "food_book.stats.tooltip.progress.max");
 		} else {
-			carrotIcon.tooltip = localized("gui", "food_book.stats.tooltip.progress", progressInfo.foodsUntilNextMilestone());
+			carrotIcon.tooltip = localized("gui", "food_book.stats.tooltip.progress", /*progressInfo.foodsUntilNextMilestone()*/ 1);
 		}
 		children.add(carrotIcon);
 		
@@ -86,7 +86,7 @@ final class ProgressGraph extends UIElement {
 			children.add(UIBox.horizontalLine(progressX + 1, rightPoint, lineY, hasReachedMax ? FoodBookScreen.leastBlack : FoodBookScreen.lessBlack));
 		}
 		
-		boolean isLastMilestoneVisible = milestonesAchieved + 1 >= SOLCarrotConfig.getMilestoneCount();
+		boolean isLastMilestoneVisible = milestonesAchieved + 1 >= 1; /*SOLCarrotConfig.getMilestoneCount()*/;
 		// if the last milestone is visible, there are no more milestones beyond the right edge, so the line is fainter.
 		children.add(UIBox.horizontalLine(rightPoint + 1, rightEdge, lineY, isLastMilestoneVisible ? FoodBookScreen.leastBlack : FoodBookScreen.lessBlack));
 		
@@ -106,7 +106,7 @@ final class ProgressGraph extends UIElement {
 	private void addHeartsView(int centerX, int maxY, boolean isOpaque) {
 		UIStack heartsView = new UIStack();
 		
-		int heartCount = SOLCarrotConfig.getHeartsPerMilestone();
+		int heartCount = 1; //SOLCarrotConfig.getHeartsPerMilestone();
 		
 		heartsView.tooltip = localizedQuantity("gui", "food_book.stats.tooltip.hearts_per_milestone", heartCount);
 		

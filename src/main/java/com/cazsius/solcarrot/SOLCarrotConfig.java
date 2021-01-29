@@ -69,12 +69,12 @@ public final class SOLCarrotConfig {
 		return SERVER.baseHearts.get();
 	}
 	
-	public static int getHeartsPerMilestone() {
-		return SERVER.heartsPerMilestone.get();
+	public static int queueNutritionPerHeart() {
+		return SERVER.queueNutritionPerHeart.get();
 	}
 	
-	public static List<Integer> getMilestones() {
-		return new ArrayList<>(SERVER.milestones.get());
+	public static int getMaxAddedHeartsFromFood() {
+		return SERVER.maxAddedHeartsFromFood.get();
 	}
 	
 	public static List<String> getBlacklist() {
@@ -96,11 +96,15 @@ public final class SOLCarrotConfig {
 	public static boolean limitProgressionToSurvival() {
 		return SERVER.limitProgressionToSurvival.get();
 	}
+
+	public static int getFoodQueueSize() {
+		return SERVER.foodQueueSize.get();
+	}
 	
 	public static class Server {
 		public final IntValue baseHearts;
-		public final IntValue heartsPerMilestone;
-		public final ConfigValue<List<? extends Integer>> milestones;
+		public final IntValue queueNutritionPerHeart;
+		public final IntValue maxAddedHeartsFromFood;
 		
 		public final ConfigValue<List<? extends String>> blacklist;
 		public final ConfigValue<List<? extends String>> whitelist;
@@ -108,6 +112,7 @@ public final class SOLCarrotConfig {
 		
 		public final BooleanValue shouldResetOnDeath;
 		public final BooleanValue limitProgressionToSurvival;
+		public final IntValue foodQueueSize;
 		
 		Server(Builder builder) {
 			builder.push("milestones");
@@ -116,16 +121,16 @@ public final class SOLCarrotConfig {
 				.translation(localizationPath("base_hearts"))
 				.comment("Number of hearts you start out with.")
 				.defineInRange("baseHearts", 10, 0, 1000);
+
+			queueNutritionPerHeart = builder
+				.translation(localizationPath("queue_nutrition_per_heart"))
+				.comment("Amount of nutrition needed per heart")
+				.defineInRange("queueNutritionPerHeart", 2, 0, 1000);
 			
-			heartsPerMilestone = builder
-				.translation(localizationPath("hearts_per_milestone"))
-				.comment("Number of hearts you gain for reaching a new milestone.")
-				.defineInRange("heartsPerMilestone", 2, 0, 1000);
-			
-			milestones = builder
-				.translation(localizationPath("milestones"))
-				.comment("A list of numbers of unique foods you need to eat to unlock each milestone, in ascending order.")
-				.defineList("milestones", Lists.newArrayList(5, 10, 15, 20, 25), e -> e instanceof Integer);
+			maxAddedHeartsFromFood = builder
+				.translation(localizationPath("max_added_hearts_from_food"))
+				.comment("Number of extra hearts you can gain from food.")
+				.defineInRange("maxAddedHealthFromFood", 10, 0,1000);
 			
 			builder.pop();
 			builder.push("filtering");
@@ -144,7 +149,12 @@ public final class SOLCarrotConfig {
 				.translation(localizationPath("minimum_food_value"))
 				.comment("The minimum hunger value foods need to provide in order to count for milestones, in half drumsticks.")
 				.defineInRange("minimumFoodValue", 1, 0, 1000);
-			
+
+			foodQueueSize = builder
+					.translation(localizationPath("food_queue_size"))
+					.comment("s")
+					.defineInRange("foodQueueSize", 8, 1,100 );
+
 			builder.pop();
 			builder.push("miscellaneous");
 			
@@ -236,18 +246,6 @@ public final class SOLCarrotConfig {
 	}
 	
 	// TODO: investigate performance of all these get() calls
-	
-	public static int milestone(int i) {
-		return SERVER.milestones.get().get(i);
-	}
-	
-	public static int getMilestoneCount() {
-		return SERVER.milestones.get().size();
-	}
-	
-	public static int highestMilestone() {
-		return milestone(getMilestoneCount() - 1);
-	}
 	
 	public static boolean hasWhitelist() {
 		return !SERVER.whitelist.get().isEmpty();

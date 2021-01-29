@@ -57,7 +57,7 @@ public final class FoodListCommand {
 		
 		IFormattableTextComponent milestoneDesc = progressInfo.hasReachedMax()
 			? localizedComponent("size.desc.milestone.max")
-			: localizedComponent("size.desc.milestone.more", progressInfo.foodsUntilNextMilestone());
+			: localizedComponent("size.desc.milestone.more", 1);
 		sendFeedback(context.getSource(), milestoneDesc);
 		
 		return Command.SINGLE_SUCCESS;

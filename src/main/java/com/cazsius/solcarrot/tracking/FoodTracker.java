@@ -38,6 +38,7 @@ public final class FoodTracker {
 		
 		FoodList foodList = FoodList.get(player);
 		boolean hasTriedNewFood = foodList.addFood(usedItem);
+		boolean isNewRecent = foodList.queueFood(usedItem);
 		
 		// check this before syncing, because the sync entails an hp update
 		boolean newMilestoneReached = MaxHealthHandler.updateFoodHPModifier(player);
@@ -64,7 +65,7 @@ public final class FoodTracker {
 				}
 			}
 			
-			ITextComponent heartsDescription = localizedQuantityComponent("message", "hearts", SOLCarrotConfig.getHeartsPerMilestone());
+			ITextComponent heartsDescription = localizedQuantityComponent("message", "hearts", SOLCarrotConfig.queueNutritionPerHeart());
 			
 			if (SOLCarrotConfig.shouldShowProgressAboveHotbar()) {
 				String messageKey = progressInfo.hasReachedMax() ? "finished.hotbar" : "milestone_achieved";
